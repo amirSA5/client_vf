@@ -41,6 +41,8 @@ function Modal_1({nomArticle,idArticle,handleClose}) {
 
   const [sousArticle, setSousArticle] = useState("");
 
+  const [sousArticleNom, setSousArticleNom] = useState("");
+
   const [listeSousArticle, setListeSousArticle] = useState([]);
 
   const [serie, setSerie] = useState([]);
@@ -50,6 +52,16 @@ function Modal_1({nomArticle,idArticle,handleClose}) {
   const [attribut, setAttribut] = useState([]);
 
   const [profiler, setProfiler] = useState([]);
+
+  const [largeur, setLargeur] = useState('');
+
+  const [hauteur, setHauteur] = useState('');
+
+  const [quantite, setQantite] = useState('');
+
+  const [profilerValue, setProfilerValue] = useState([]);
+
+  const [elementsDevis,setElementsDevis]=useState([{}])
 
 
   useEffect(data=>{
@@ -72,7 +84,8 @@ function Modal_1({nomArticle,idArticle,handleClose}) {
 
   };
 
-  const getSousArticleSerie = (id) =>{
+  const getSousArticleSerie = (id,Nom) =>{
+    setSousArticleNom(Nom)
     axios.get('http://localhost:4000/app/Liste_serie').then(res => {
         const serie = res.data
         var list = [{}]
@@ -122,6 +135,18 @@ function Modal_1({nomArticle,idArticle,handleClose}) {
         });
       
     } catch (error) {}
+  };
+
+  const ajoutPanier = (sousArticleNom,largeur,hauteur,quantite,serieValue,profilerValue) =>{
+    const valider = {
+      sousArticleNom : sousArticleNom,
+      largeur : largeur,
+      hauteur:hauteur,
+      quantite:quantite,
+      serieValue:serieValue,
+      profilerValue:profilerValue
+    }
+    setElementsDevis((elementsDevis)=>[...elementsDevis,valider])
   }
 
   return (
@@ -141,7 +166,7 @@ function Modal_1({nomArticle,idArticle,handleClose}) {
               >
                 {listeSousArticle.map((data) => {
                   return (
-                    <MenuItem key={data._id} name={data.Nom} value={data._id} onClick={()=>getSousArticleSerie(data._id)} >
+                    <MenuItem key={data._id} name={data.Nom} value={data._id} onClick={()=>getSousArticleSerie(data._id,data.Nom)} >
                       {data.Nom}
                     </MenuItem>
                   );
@@ -157,13 +182,16 @@ function Modal_1({nomArticle,idArticle,handleClose}) {
                       required
                       type="number"
                       inputProps={ariaLabel}
+                      onChange={(e)=>setLargeur(e.target.value)}
                     />
                   </td>
                   <td className="td_table_Details_Modal">
                     <Input
                       placeholder="donner votre hauteur"
+                      required
                       type="number"
                       inputProps={ariaLabel}
+                      onChange={(e)=>setHauteur(e.target.value)}
                     />
                   </td>
                 </tr>
@@ -179,6 +207,7 @@ function Modal_1({nomArticle,idArticle,handleClose}) {
                       label="quntité"
                       type="number"
                       InputLabelProps={{ shrink: true }}
+                      onChange={(e)=>setQantite(e.target.value)}
                     />
                   </td>
                 </tr>
@@ -214,7 +243,7 @@ function Modal_1({nomArticle,idArticle,handleClose}) {
                        <td className="td_table_next" key={data._id}>{data.Nom}</td>
                        {profiler.map((data)=>{
                         return(
-                            <td className="td_table_next" key={data._id}>{data.reference}<Checkbox {...label} /></td>
+                            <td className="td_table_next" key={data._id}>{data.reference}<Checkbox value={data.reference} {...label} onChange={(e)=>setProfilerValue((profilerValue)=>[...profilerValue,e.target.value])} /></td>
                         )
                        })} 
                       </tr>
@@ -230,6 +259,7 @@ function Modal_1({nomArticle,idArticle,handleClose}) {
                       size="large"
                       variant="contained"
                       color="success"
+                      onClick={()=>ajoutPanier(sousArticleNom,largeur,hauteur,quantite,serieValue,profilerValue)}
                     >
                       Ajout
                     </Button>
