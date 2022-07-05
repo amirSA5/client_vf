@@ -59,7 +59,7 @@ function Modal_1({nomArticle,idArticle,handleClose}) {
 
   const [quantite, setQantite] = useState('');
 
-  const [profilerValue, setProfilerValue] = useState([]);
+  const [profilerValue, setProfilerValue] = useState([{}]);
 
   const [elementsDevis,setElementsDevis]=useState([{}])
 
@@ -147,6 +147,8 @@ function Modal_1({nomArticle,idArticle,handleClose}) {
       profilerValue:profilerValue
     }
     setElementsDevis((elementsDevis)=>[...elementsDevis,valider])
+      console.log(elementsDevis)
+
   }
 
   return (
@@ -243,7 +245,7 @@ function Modal_1({nomArticle,idArticle,handleClose}) {
                        <td className="td_table_next" key={data._id}>{data.Nom}</td>
                        {profiler.map((data)=>{
                         return(
-                            <td className="td_table_next" key={data._id}>{data.reference}<Checkbox value={data.reference} {...label} onChange={(e)=>setProfilerValue((profilerValue)=>[...profilerValue,e.target.value])} /></td>
+                            <td className="td_table_next" key={data._id}>{data.reference}<Checkbox value={data.reference} name={data.formule} {...label} onChange={(e)=>setProfilerValue((profilerValue)=>[...profilerValue,{reference:e.target.value,formule:e.target.name}])} /></td>
                         )
                        })} 
                       </tr>
