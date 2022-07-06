@@ -4,6 +4,8 @@ import ArticleItem from "./articleItem/ArticleItem";
 import "./Step1_devis.css";
 import Modal from "@mui/material/Modal";
 import Modal1 from './Modal_Items_devis/Modal_1'
+import ShoppingCart from "./shoppingCart/ShoppingCart"
+
 
 function Step1_devis() {
 
@@ -14,6 +16,9 @@ function Step1_devis() {
   const [nomArticle,setNomArticle]=useState('')
 
   const [idArticle,setIdArticle]=useState('')
+
+  const [elementsDevis,setElementsDevis]=useState([{}])
+
 
 
   useEffect(
@@ -55,6 +60,7 @@ function Step1_devis() {
 
   return (
     <div className="Step1_devis">
+      <ShoppingCart elementsDevis={elementsDevis}/>
       <div className="articles">
         {articles.map((article) => {
           return (
@@ -71,7 +77,7 @@ function Step1_devis() {
         aria-labelledby="child-modal-title"
         aria-describedby="child-modal-description"
       >
-        <Modal1 nomArticle={nomArticle} idArticle={idArticle} handleClose={handleClose} />
+        <Modal1 nomArticle={nomArticle} idArticle={idArticle} handleClose={handleClose} setElementsDevis={setElementsDevis} />
       </Modal>
     </div>
   )

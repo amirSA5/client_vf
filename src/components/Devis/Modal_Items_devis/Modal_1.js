@@ -37,7 +37,8 @@ const ariaLabel = { "aria-label": "description" };
 
 const label = { inputProps: { "aria-label": 'Checkbox demo' } };
 
-function Modal_1({nomArticle,idArticle,handleClose}) {
+
+function Modal_1({nomArticle,idArticle,handleClose,setElementsDevis}) {
 
   const [sousArticle, setSousArticle] = useState("");
 
@@ -61,7 +62,6 @@ function Modal_1({nomArticle,idArticle,handleClose}) {
 
   const [profilerValue, setProfilerValue] = useState([{}]);
 
-  const [elementsDevis,setElementsDevis]=useState([{}])
 
 
   useEffect(data=>{
@@ -147,7 +147,7 @@ function Modal_1({nomArticle,idArticle,handleClose}) {
       profilerValue:profilerValue
     }
     setElementsDevis((elementsDevis)=>[...elementsDevis,valider])
-      console.log(elementsDevis)
+    handleClose()
 
   }
 
