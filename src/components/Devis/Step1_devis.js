@@ -39,6 +39,7 @@ function Step1_devis() {
 
   const handleClose = () => {
     setOpen(false);
+    console.log(elementsDevis)
   };
 
   const deleteArticle = async (id, public_id) => {
