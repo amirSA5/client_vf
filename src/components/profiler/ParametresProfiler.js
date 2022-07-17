@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Button from '@mui/material/Button';
-import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import './ParametresProfiler.css'
 import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
-import TextField from "@mui/material/TextField";
 import DeleteIcon from '@mui/icons-material/Delete';
-import UpdateIcon from '@mui/icons-material/Update';
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import ModalAjoutArticle from './modal_Parametres_Profiler/ModalAjoutArticle';

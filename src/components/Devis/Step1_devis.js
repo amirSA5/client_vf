@@ -17,7 +17,7 @@ function Step1_devis() {
 
   const [idArticle,setIdArticle]=useState('')
 
-  const [elementsDevis,setElementsDevis]=useState([{}])
+  const [elementsDevis,setElementsDevis]=useState([])
 
 
 

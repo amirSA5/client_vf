@@ -60,7 +60,7 @@ function Modal_1({nomArticle,idArticle,handleClose,setElementsDevis}) {
 
   const [quantite, setQantite] = useState('');
 
-  const [profilerValue, setProfilerValue] = useState([{}]);
+  const [profilerValue, setProfilerValue] = useState([]);
 
 
 
