@@ -1,0 +1,49 @@
+
+#logo{
+    margin-top: 50px;
+    height: 80px;
+    width: 130px;
+    margin-left: 20px;
+}
+#desc_soc {
+   
+    justify-content: left;
+}
+#desc_devis {
+    padding-bottom: 20px;
+}
+
+.desc #desc_soc > div{
+    display: grid;
+    row-gap: 2px;
+}
+
+
+.desc #desc_devis > div{
+    display: grid;
+    row-gap: 2px;
+}
+
+.desc {
+    border: 2px solid rgba(66, 120, 221, 0.87);
+    width:100%
+}
+.entete{
+    display: grid;
+    grid-column: 2;
+    grid-template-columns:65% 35%;
+
+    
+}
+h3{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: rgba(66, 120, 221, 0.87);
+    text-align: left;
+    padding-bottom: 0px;
+    margin-top: 40px;
+}
+#histo{
+    margin-top: 20px;
+    margin-left: 90px;
+}
+

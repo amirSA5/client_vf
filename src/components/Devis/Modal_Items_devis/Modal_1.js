@@ -243,9 +243,10 @@ function Modal_1({nomArticle,idArticle,handleClose,setElementsDevis}) {
                     return (
                       <tr key={data._id} >
                        <td className="td_table_next" key={data._id}>{data.Nom}</td>
-                       {profiler.map((data)=>{
+                       {profiler.map((item)=>{
+                        if(data._id===item.attribut)
                         return(
-                            <td className="td_table_next" key={data._id}>{data.reference}<Checkbox value={data.reference} name={data.formule} {...label} onChange={(e)=>setProfilerValue((profilerValue)=>[...profilerValue,{reference:e.target.value,formule:e.target.name}])} /></td>
+                            <td className="td_table_next" key={item._id}>{item.reference}<Checkbox value={item.reference} name={item.formule} {...label} onChange={(e)=>setProfilerValue((profilerValue)=>[...profilerValue,{reference:e.target.value,formule:e.target.name}])} /></td>
                         )
                        })} 
                       </tr>

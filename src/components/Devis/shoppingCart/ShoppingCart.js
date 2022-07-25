@@ -75,18 +75,21 @@ export default function ShoppingCart({ elementsDevis }) {
     setMontantMainOeuvre(e.target.value);
   };
   const handleOpenMiseEnBar = () => {
+    console.log(elementsDevis)
     setOpenMiseEnBar(true);
     for(var i=0;i<elementsDevis.length;i++){
-    elementsDevis[i].profilerValue[0].formule=elementsDevis[i].profilerValue[0].formule && elementsDevis[i].profilerValue[0].formule.replace('H',elementsDevis[i].hauteur)
-    elementsDevis[i].profilerValue[0].formule=elementsDevis[i].profilerValue[0].formule && elementsDevis[i].profilerValue[0].formule.replace('L',elementsDevis[i].largeur)
-    var nb= Number(eval(elementsDevis[i].profilerValue[0].formule)/6500)*Number(elementsDevis[i].quantite)
-    if(refs.includes(elementsDevis[i].profilerValue[0].reference)===false){
-      refs.push(elementsDevis[i].profilerValue[0].reference)
-      vals.push(nb)
-    }else{
-      var indice = refs.indexOf(elementsDevis[i].profilerValue[0].reference)
-      vals[indice]=Number(vals[indice])+Number(nb)
-    }
+      for(var j=0;j<elementsDevis[i].profilerValue.length;j++){
+        elementsDevis[i].profilerValue[j].formule=elementsDevis[i].profilerValue[j].formule && elementsDevis[i].profilerValue[j].formule.replace('H',elementsDevis[i].hauteur)
+        elementsDevis[i].profilerValue[j].formule=elementsDevis[i].profilerValue[j].formule && elementsDevis[i].profilerValue[j].formule.replace('L',elementsDevis[i].largeur)
+        var nb= Number(eval(elementsDevis[i].profilerValue[j].formule)/6500)*Number(elementsDevis[i].quantite)
+        if(refs.includes(elementsDevis[i].profilerValue[j].reference)===false){
+          refs.push(elementsDevis[i].profilerValue[j].reference)
+          vals.push(nb)
+        }else{
+          var indice = refs.indexOf(elementsDevis[i].profilerValue[j].reference)
+          vals[indice]=Number(vals[indice])+Number(nb)
+        }
+      }
   }
   };
 

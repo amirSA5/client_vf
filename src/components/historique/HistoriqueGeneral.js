@@ -6,74 +6,106 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import HistoryTableItem from "./HistoryTableItem";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import PointOfSaleOutlinedIcon from "@mui/icons-material/PointOfSaleOutlined";
+import Button from '@mui/material/Button';
+import axios from 'axios';
+import ModalDevis from "./ModalDevis/ModalDevis";
+import Modal from "@mui/material/Modal";
 
-function createData(name, calories, fat, carbs, protein, price) {
-  return {
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-    price,
-    history: [
-      {
-        date: "2020-01-05",
-        customerId: "11091700",
-        amount: 3,
-      },
-      {
-        date: "2020-01-02",
-        customerId: "Anonymous",
-        amount: 1,
-      },
-    ],
-  };
-}
 
-const rows = [
-  createData("Talbi Omar", 159, 6.0, 24, 4.0, 3.99),
-  createData("Soussi Amir", 237, 9.0, 37, 4.3, 4.99),
-  createData("Zguerguer Wassim", 262, 16.0, 24, 6.0, 3.79),
-  createData("foulen ben foulen", 305, 3.7, 67, 4.3, 2.5),
-];
+
 
 export default function HistoriqueGeneral() {
+
+  const [devis, setDevis] = React.useState([]);
+
+  const [open, setOpen] = React.useState(false);
+
+  const [element, setElement] = React.useState([]);
+
+  React.useEffect(
+    (data) => {
+      axios.get("http://localhost:4000/app/Liste_Devis").then((res) => {
+        const devis = res.data;
+        setDevis(devis);
+      });
+    },
+    [devis]
+  );
+
+  const deleteDevis = async (id) => {
+    try {
+
+      const deleteDevis = axios.delete(
+        `http://localhost:4000/app/delete_Devis/${id}`
+      );
+
+
+      await deleteDevis;
+
+    } catch (err) {
+      alert(err.response.data.msg);
+    }
+  };
+
+  const handleOpen = (row) => {
+    setElement(row)
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">
         <TableHead >
           <TableRow>
-            <TableCell />
-            <TableCell style={{ color: "#1976d2",fontWeight:"bold" }}>
-              <AccountCircleIcon /> &nbsp;&nbsp;Client
+            
+            <TableCell style={{ color: "#1976d2",fontWeight:"bold" }} align="center">
+            Nom Client
             </TableCell>
             <TableCell style={{ color: "#1976d2",fontWeight:"bold" }} align="center">
-              {" "}
-              Devis Total <br />
-              <PointOfSaleOutlinedIcon />
+            Prenom Client
             </TableCell>
             <TableCell style={{ color: "#1976d2",fontWeight:"bold" }} align="center">
-              .......
+            Numero Tel
             </TableCell>
             <TableCell style={{ color: "#1976d2",fontWeight:"bold" }} align="center">
-              .......
+            Montant
             </TableCell>
             <TableCell style={{ color: "#1976d2",fontWeight:"bold" }} align="center">
-              .......
+            Actions
             </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row,index) => (
-            <HistoryTableItem key={row.name} row={row} index={index}>
-
-            </HistoryTableItem>
-          ))}
+          {
+            devis.map(row=>{
+              return(
+                <>
+                <TableRow>
+                  <TableCell  align="center">{row.Nom_Client}</TableCell>
+                  <TableCell  align="center">{row.Prenom_Client}</TableCell>
+                  <TableCell  align="center">{row.Num_tel}</TableCell>
+                  <TableCell  align="center">{row.montant}</TableCell>
+                  <TableCell  align="center"><Button variant="outlined" color="error" onClick={()=>deleteDevis(row._id)}>Supprimer</Button><Button variant="outlined" color="error" onClick={()=>handleOpen(row)}>PDF</Button></TableCell>
+                </TableRow>
+                
+                </>
+              )
+            })
+          }
         </TableBody>
       </Table>
+      <Modal
+        hideBackdrop
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="child-modal-title"
+        aria-describedby="child-modal-description"
+      >
+        <ModalDevis element={element}  handleClose={handleClose}  />
+      </Modal>
     </TableContainer>
   );
 }

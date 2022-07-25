@@ -14,6 +14,7 @@ import ModalAjoutSerie from './modal_Parametres_Profiler/ModalAjoutSerie';
 import BtnRenderSerie from './btnRenderParamsProfiler/BtnRenderSerie';
 import ModalAjoutAttribut from './modal_Parametres_Profiler/ModalAjoutAttribut';
 import ModalAjoutProfiler from './modal_Parametres_Profiler/ModalAjoutProfiler';
+import ModalAjoutVer from './modal_Parametres_Profiler/ModalAjoutVer';
 function ParametresProfiler() {
 
     const [article, setArticle] = useState([])
@@ -56,7 +57,14 @@ function ParametresProfiler() {
 
     const [openProfiler, setOpenProfiler] = useState(false);
 
+    const [openVer, setOpenVer] = useState(false);
+
+
     const [attributID, setAttributID] = useState("")
+
+    const [ver, setVer] = useState([])
+
+    const [verItem, setVerItem] = useState([])
 
 
     useEffect(() => {
@@ -80,8 +88,12 @@ function ParametresProfiler() {
           const profiler = res.data
           setProfiler(profiler)
         })
+      axios.get("http://localhost:4000/app/Liste_ver").then((res) => {
+          const ver = res.data
+          setVer(ver)
+        })
       
-  },[])
+  },[article,nomArticle,nomSousArticle,nomSerie])
 
     const handleOpen = () => {
     setOpen(true);
@@ -183,7 +195,7 @@ function ParametresProfiler() {
       setNomSerie(Nom)
       setSerieID(id)
       
-        var list = [{}]
+        var list = []
         var j = 0
         for (var i = 0; i < attribut.length; i++) {
           if (id === attribut[i].serie) {
@@ -193,7 +205,7 @@ function ParametresProfiler() {
         }
         setAttributItem(list)
         
-          var tab = [{}]
+          var tab = []
           var k = 0
           for (var n = 0; n < profiler.length; n++) {
             for (var m = 0; m < list.length; m++) {
@@ -205,7 +217,19 @@ function ParametresProfiler() {
             }
           }
           setProfilerItem(tab)
-      
+
+          var listver = []
+          var s = 0
+            for (var r = 0; r < ver.length; r++) {
+            if (id === ver[r].serie) {
+              listver[s] = ver[r]
+              s++
+              console.log(listver)
+            }
+          }
+          
+          setVerItem(listver)
+          
 
 
 
@@ -214,6 +238,14 @@ function ParametresProfiler() {
     }
 
   }
+
+  const handleOpenVer = () => {
+    setOpenVer(true);
+  };
+
+  const handleCloseVer = () => {
+    setOpenVer(false);
+  };
 
   const handleOpenAttribut = () => {
     setOpenAttribut(true);
@@ -232,6 +264,21 @@ function ParametresProfiler() {
 
 
       await deleteAttribut;
+
+    } catch (err) {
+      alert(err.response.data.msg);
+    }
+  };
+
+  const deleteVer = async (id) => {
+    try {
+
+      const deletever = axios.delete(
+        `http://localhost:4000/app/delete_ver/${id}`
+      );
+
+
+      await deletever;
 
     } catch (err) {
       alert(err.response.data.msg);
@@ -312,9 +359,10 @@ function ParametresProfiler() {
                                 {data.Nom}
                               </td>
 
-                              {profilerItem.map((data) => {
+                              {profilerItem.map((item) => {
+                                if(data._id===item.attribut)
                                 return (
-                                  <td key={data._id} className="td_table_next">{data.reference}</td>
+                                  <td key={item._id} className="td_table_next">{item.reference}</td>
                                 )
                               })}
                             </tr>
@@ -322,7 +370,25 @@ function ParametresProfiler() {
                         })}
           </tbody>
         </table>
+        <Button onClick={handleOpenVer} >ajout ver</Button>
+          <table>
+          
+          <tbody>
+            {verItem.map((data) => {
+                          return (
+                            <tr key={data._id} >
+                              <td>
+                                <Button onClick={() => deleteVer(data._id)}  className='paramétres_profiler' size='small' variant="contained" color="error"><DeleteIcon /></Button>
+                              </td>
+                              <td className="td_table_next" key={data._id}>
+                                {data.reference}
+                              </td>
+                            </tr>
+                          );
+                        })}
 
+          </tbody>
+        </table>              
       <Modal
         hideBackdrop
         open={open}
@@ -367,6 +433,15 @@ function ParametresProfiler() {
         aria-describedby="child-modal-description"
       >
       <ModalAjoutProfiler  attributID={attributID} handleCloseProfiler={handleCloseProfiler} />
+      </Modal>
+      <Modal
+        hideBackdrop
+        open={openVer}
+        onClose={handleCloseVer}
+        aria-labelledby="child-modal-title"
+        aria-describedby="child-modal-description"
+      >
+      <ModalAjoutVer  serieID={serieID} handleCloseVer={handleCloseVer} />
       </Modal>
     </div>
   )
