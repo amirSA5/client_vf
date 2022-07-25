@@ -13,13 +13,14 @@ export default function Devis(){
     (data) => {
       axios.get("http://localhost:4000/app/Liste_Devis").then((res) => {
         const devis = res.data;
-        setDevis(...devis[devis.length-1]);
+        console.log(devis[devis.length-1].Nom_Client)
+        setDevis(devis[devis.length-1]);
       });
     },
     [devis]
   );
     
-    const date=  new Date();
+    const date = new Date();
    
     return(
        
@@ -44,7 +45,7 @@ export default function Devis(){
         </div> 
         </div>
         <section id="devis">
-            <DevisTable devis={devis} />
+          <DevisTable devis={devis} />
         </section>
         
     </div>

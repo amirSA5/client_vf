@@ -13,40 +13,6 @@ function ccyFormat(num: number) {
   return `${num.toFixed(2)}`;
 }
 
-function priceRow(qty: number, unit: number) {
-  return qty * unit;
-}
-
-function createRow(desc: string,serie:number,taille:string, qty: number,unit: number,sum:number) {
-  const price = priceRow(qty, unit);
-  return { desc,serie, taille,qty, unit,price };
-}
-
-interface Row {
-  desc: string;
-  serie: number;
-  taille:String;
-  qty: number;
-  unit: number;
-  sum: number;
-}
-
-
-function subtotal(items)
-{
-  return items.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
-}
-
-const rows = [
-  createRow('Article1', 1,'1200*1300',10,150),
-  createRow('Article2', 2, '1000*2000',200,200),
-  createRow('Article3', 3, '500*2000',15,300),
-];
-
-const invoiceSubtotal = subtotal(rows);
-const invoiceTaxes = TAX_RATE * invoiceSubtotal;
-const invoiceTotal = invoiceTaxes + invoiceSubtotal;
-
 export default function SpanningTable({element}) {
   return (
     <TableContainer component={Paper}>

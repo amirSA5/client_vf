@@ -14,6 +14,7 @@ import TextField from '@mui/material/TextField';
 import axios from 'axios'
 import Modal from "@mui/material/Modal";
 import ModalMiseEnBar from '../Modal_Items_devis/ModalMiseEnBar';
+import ModalMiseEnVer from '../Modal_Items_devis/ModalMiseEnVer';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -24,6 +25,8 @@ export default function ShoppingCart({ elementsDevis }) {
   const [open, setOpen] = React.useState(false);
 
   const [openMiseEnBar, setOpenMiseEnBar] = React.useState(false);
+
+  const [miseEnVer, setOpenMiseEnVer] = React.useState(false);
 
   const [nomClient,setNomClient]=React.useState("")
 
@@ -43,7 +46,10 @@ export default function ShoppingCart({ elementsDevis }) {
 
   const [vals,setVals]=React.useState([])
 
- 
+   const [refsMV,setRefsMV]=React.useState([])
+
+  const [valsMV,setValsMV]=React.useState([])
+
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -75,7 +81,6 @@ export default function ShoppingCart({ elementsDevis }) {
     setMontantMainOeuvre(e.target.value);
   };
   const handleOpenMiseEnBar = () => {
-    console.log(elementsDevis)
     setOpenMiseEnBar(true);
     for(var i=0;i<elementsDevis.length;i++){
       for(var j=0;j<elementsDevis[i].profilerValue.length;j++){
@@ -97,6 +102,28 @@ export default function ShoppingCart({ elementsDevis }) {
     setOpenMiseEnBar(false);
   };
 
+  const handleOpenMiseEnVer = () => {
+    setOpenMiseEnVer(true);
+    for(var i=0;i<elementsDevis.length;i++){
+      for(var j=0;j<elementsDevis[i].verValue.length;j++){
+        elementsDevis[i].verValue[j].formule=elementsDevis[i].verValue[j].formule && elementsDevis[i].verValue[j].formule.replace('H',elementsDevis[i].hauteur)
+        elementsDevis[i].verValue[j].formule=elementsDevis[i].verValue[j].formule && elementsDevis[i].verValue[j].formule.replace('L',elementsDevis[i].largeur)
+        var nb= Number(eval(elementsDevis[i].verValue[j].formule))*Number(elementsDevis[i].quantite)
+        if(refsMV.includes(elementsDevis[i].verValue[j].reference)===false){
+          refsMV.push(elementsDevis[i].verValue[j].reference)
+          valsMV.push(nb)
+        }else{
+          var indice = refs.indexOf(elementsDevis[i].verValue[j].reference)
+          valsMV[indice]=Number(valsMV[indice])+Number(nb)
+        }
+        
+      }
+  }
+  };
+
+  const handleCloseMiseEnVer = () => {
+    setOpenMiseEnVer(false);
+  };
   var montantTotal=Number(montantAl)+Number(montantVer)+Number(montantMainOeuvre)
 
   const ajoutDevis = () =>{
@@ -175,7 +202,7 @@ export default function ShoppingCart({ elementsDevis }) {
           <tbody>
             <tr>
               <td><Button variant="outlined" color="error" onClick={handleOpenMiseEnBar}>mise en bar</Button></td>
-              <td><Button variant="outlined" color="error">ver</Button></td>
+              <td><Button variant="outlined" color="error"  onClick={handleOpenMiseEnVer}>ver</Button></td>
             </tr>
           </tbody>
         </table>
@@ -204,6 +231,15 @@ export default function ShoppingCart({ elementsDevis }) {
         aria-describedby="child-modal-description"
       >
       <ModalMiseEnBar refs={refs} vals={vals}  handleCloseMiseEnBar={handleCloseMiseEnBar} />
+      </Modal>
+      <Modal
+        hideBackdrop
+        open={miseEnVer}
+        onClose={handleCloseMiseEnVer}
+        aria-labelledby="child-modal-title"
+        aria-describedby="child-modal-description"
+      >
+      <ModalMiseEnVer refsMV={refsMV} valsMV={valsMV}  handleCloseMiseEnVer={handleCloseMiseEnVer} />
       </Modal>
       </Dialog>
     </div>

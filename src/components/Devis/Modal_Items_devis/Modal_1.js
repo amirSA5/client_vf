@@ -62,7 +62,9 @@ function Modal_1({nomArticle,idArticle,handleClose,setElementsDevis}) {
 
   const [profilerValue, setProfilerValue] = useState([]);
 
+  const [ver, setVer] = useState([]);
 
+  const [verValuee, setVerValue] = useState([]);
 
   useEffect(data=>{
     axios.get("http://localhost:4000/app/Liste_sousArticle").then((res) => {
@@ -133,18 +135,31 @@ function Modal_1({nomArticle,idArticle,handleClose,setElementsDevis}) {
             setProfiler(tab)
         })
         });
+        axios.get("http://localhost:4000/app/Liste_ver").then((res) => {
+          const ver = res.data
+          var list =[{}]
+          var j=0
+          for(var i=0;i<ver.length;i++){
+            if(id===ver[i].serie){
+                list[j]=ver[i]
+                j++
+            }
+        }
+          setVer(ver)
+        })
       
     } catch (error) {}
   };
 
-  const ajoutPanier = (sousArticleNom,largeur,hauteur,quantite,serieValue,profilerValue) =>{
+  const ajoutPanier = (sousArticleNom,largeur,hauteur,quantite,serieValue,profilerValue,verValue) =>{
     const valider = {
       sousArticleNom : sousArticleNom,
       largeur : largeur,
       hauteur:hauteur,
       quantite:quantite,
       serieValue:serieValue,
-      profilerValue:profilerValue
+      profilerValue:profilerValue,
+      verValue:verValuee
     }
     setElementsDevis((elementsDevis)=>[...elementsDevis,valider])
     handleClose()
@@ -252,6 +267,17 @@ function Modal_1({nomArticle,idArticle,handleClose,setElementsDevis}) {
                       </tr>
                     );
                   })}
+              </tbody>
+            </table>
+            <table>
+              <tbody>
+              <tr>
+                {
+                  ver.map(data=>{
+                    return <td>{data.reference}<Checkbox value={data.reference} name={data.formule} {...label} onChange={(e)=>setVerValue((verValue)=>[...verValue,{reference:e.target.value,formule:e.target.name}])} /></td>
+                  })
+                }
+                </tr>
               </tbody>
             </table>
             <table>
